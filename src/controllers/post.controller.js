@@ -9,6 +9,18 @@ const createPost = async (req, res) => {
     res.status(httpStatus.CREATED).send(post);
 };
 
+const deletePost = async (req, res) => {
+  const postId = req.params.postId;
+  const userAuth = req.userAuth;
+  const post = await Post.findById(postId);
+  if (post && userAuth && post.author.toString() === userAuth.decoded.userId) {
+    await Post.findByIdAndDelete(postId);
+    res.status(httpStatus.NO_CONTENT).send();
+  } else {
+    res.status(httpStatus.UNAUTHORIZED).send();
+  }
+};
+
 const getPosts = async (req, res) => {
   const { filters, options } = getPaginateParams(req, ["title", "topic"]);
   options.excludeFields = req.userAuth ? [] : ['content_value'];
@@ -28,6 +40,7 @@ const getPost = async (req, res) => {
 
 module.exports = {
   createPost,
+  deletePost,
   getPosts,
   getPost,
 };

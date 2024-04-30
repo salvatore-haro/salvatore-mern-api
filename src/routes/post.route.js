@@ -75,6 +75,28 @@ router.get("/:postId", isCreator, postController.getPost);
 
 /**
  * @swagger
+ * /posts/{id}:
+ *   delete:
+ *     tags: [Posts]
+ *     security:
+ *       - JWTAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *          200:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ */
+router.delete("/:postId", postController.deletePost);
+
+/**
+ * @swagger
  * /posts:
  *   get:
  *     tags: [Posts]
